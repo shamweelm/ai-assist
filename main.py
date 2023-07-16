@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from logger import get_logger
 import uvicorn
 from ai_assist.routes.chat_routes import chat_router
+from ai_assist.routes.users_routes import users_router
 
 logger = get_logger(__name__)
 
@@ -10,6 +11,7 @@ app = FastAPI()
 
 # Add prefix to all routes
 app.include_router(chat_router, prefix="/api/v1")
+app.include_router(users_router, prefix="/api/v1")
 
 
 @app.on_event("startup")

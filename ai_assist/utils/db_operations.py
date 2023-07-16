@@ -1,7 +1,9 @@
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from .db_models import Base
+from sqlalchemy.ext.declarative import declarative_base
 from settings import CONNECTION_URL
+
+Base = declarative_base()
 
 
 class DatabaseOperations:
@@ -42,6 +44,18 @@ class DatabaseOperations:
             query = {str(key): value for key, value in query.items()}
             record = session.query(model).filter_by(**query).first()
             return record
+        except Exception as error:
+            print('Error fetching record:', error)
+        finally:
+            session.close()
+    
+    def fetch_all_records(self, model, query):
+        session = self.Session()
+        try:
+            # Convert the keys in the query dictionary to strings
+            query = {str(key): value for key, value in query.items()}
+            records = session.query(model).filter_by(**query).all()
+            return records
         except Exception as error:
             print('Error fetching record:', error)
         finally:
